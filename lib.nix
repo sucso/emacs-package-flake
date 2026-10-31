@@ -6,18 +6,20 @@
     , src
     , regexes ? [ "^.*\.el$" "^tests?$" "^tests?/.*$" ]
     , version ? null
+    , overlays ? []
     , doErt ? false
     , doCheckdoc ? true
     , doPackageLint ? true
     , doCheck ? true
     }:
     let
-      overlay = final: prev: {
+      packageOverlay = final: prev: {
         emacsPackagesFor = emacs:
         (prev.emacsPackagesFor emacs).overrideScope (efinal: _eprev: {
           ${name} = mkPackage final efinal;
         });
       };
+      overlay = nixpkgs.lib.composeManyExtensions (overlays ++ [packageOverlay]);
 
       mkPackage = pkgs: efinal:
       let
