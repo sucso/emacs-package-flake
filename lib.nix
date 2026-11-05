@@ -34,7 +34,6 @@
           (parse.parsePackagesFromPackageRequires
             (builtins.readFile file));
         dependencies = requires
-        ++ (lib.optional doErt "ert-runner")
         ++ (lib.optional doPackageLint "package-lint");
         emacsWithDeps = efinal.emacsWithPackages (epkgs:
         map (x: builtins.getAttr x epkgs) dependencies);
@@ -77,8 +76,15 @@
           set -e
 
           ${lib.optionalString doErt ''
-            emacs -L . --batch \
-              --eval "(progn (require 'ert-runner) (ert-run-tests t #'ignore))"
+            emacs --batch \
+              --directory . \
+              --directory test \
+              --load ert \
+              --eval "
+                (progn
+                  (mapc 'load-file (file-expand-wildcards \"test/*.el\"))
+                  (ert-run-tests-batch-and-exit t))
+              "
           ''}
 
           ${lib.optionalString doCheckdoc ''
