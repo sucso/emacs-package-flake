@@ -7,10 +7,10 @@
     , regexes ? [ "^.*\.el$" "^tests?$" "^tests?/.*$" ]
     , version ? null
     , overlays ? []
+    , doCheck ? true
     , doErt ? false
     , doCheckdoc ? true
     , doPackageLint ? true
-    , doCheck ? true
     }:
     let
       packageOverlay = final: prev: {
