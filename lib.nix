@@ -59,7 +59,9 @@
 
         buildPhase = ''
           set -e
-          emacs -L . --batch -f batch-byte-compile *.el 2> stderr.txt
+          emacs --batch \
+            --directory . \
+            --funcall batch-byte-compile *.el 2> stderr.txt
           cat stderr.txt
           ! grep -q ': Warning:' stderr.txt || false
         '';
@@ -88,19 +90,21 @@
           ''}
 
           ${lib.optionalString doCheckdoc ''
-            emacs -L . --batch --eval "
-              (progn
-                (require 'checkdoc)
-                (dolist (x command-line-args-left)
-                  (checkdoc-file x)))
+            emacs --batch \
+              --directory . \
+              --eval "
+                (progn
+                  (require 'checkdoc)
+                  (dolist (x command-line-args-left)
+                    (checkdoc-file x)))
             " *.el 2> checkdoc-stderr.txt
             cat checkdoc-stderr.txt
             ! test -s checkdoc-stderr.txt || false
           ''}
 
           ${lib.optionalString doPackageLint ''
-            emacs -L . \
-              --batch \
+            emacs --batch \
+              --directory . \
               --eval "
                 (progn
                   (require 'package-lint)
