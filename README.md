@@ -31,7 +31,7 @@ The main use case is to have an easy and reliable continuous-integration (CI) se
 The `mkOutputs` function accepts the following arguments.
 * `name` (required): the name of the Emacs package.
 * `src` (required): the directory where the Emacs package is located.
-* `regexes` (optional): a list of regular expressions that match the Emacs package's source files. The default value is `[ "^.*\.el$" "^tests?/.*$" ]`. (By default, the Emacs packages are assumed to be located at the top level of the `src` directory, while the ERT tests are assumed to be located under `src`'s `test` subdirectory.)
+* `regexes` (optional): a list of regular expressions that match the Emacs package's source files. The default value is `[ "^.*\.el$" "^test/.*$" ]`. (By default, the Emacs packages are assumed to be located at the top level of the `src` directory, while the ERT tests are assumed to be located under `src`'s `test` subdirectory.)
 * `version` (optional): a string indicating the version of the Emacs package. Defaults to the value of the Emacs package's version header.
 * `overlays` (optional): a list of overlays for the Emacs package's own dependencies, typically the `overlays.default` output of each dependency's flake. They are composed with the package's overlay. Defaults to `[]`.
 * `doCheck` (optional): passed to the Nix derivation for the Emacs package. Defaults to `true`. Setting `doCheck` to `false` disables all checks.

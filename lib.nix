@@ -4,7 +4,7 @@
   mkOutputs =
     { name
     , src
-    , regexes ? [ "^.*\.el$" "^tests?$" "^tests?/.*$" ]
+    , regexes ? [ "^.*\.el$" "^test$" "^test/.*$" ]
     , version ? null
     , overlays ? []
     , doCheck ? true
