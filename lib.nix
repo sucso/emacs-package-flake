@@ -78,7 +78,7 @@
 
           ${lib.optionalString doErt ''
             emacs -L . --batch \
-              --eval "(progn (require 'ert-runner) (ert-run-tests t (lambda (x) nil)))"
+              --eval "(progn (require 'ert-runner) (ert-run-tests t #'ignore))"
           ''}
 
           ${lib.optionalString doCheckdoc ''
