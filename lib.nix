@@ -28,9 +28,6 @@
       builtins.filter (n: n != "emacs")
         (parse.parsePackagesFromPackageRequires (builtins.readFile file));
 
-      emacsWith = efinal: packages:
-        efinal.emacsWithPackages (epkgs: map (x: epkgs.${x}) packages);
-
       versionFrom = file:
       let
         matches = builtins.filter (m: m != null)
@@ -54,31 +51,12 @@
       overlay = nixpkgs.lib.composeManyExtensions (overlays ++ [ packageOverlay ]);
 
       mkPackage = pkgs: efinal:
-      let
-        requires = requiresFor pkgs;
-      in
-      pkgs.stdenv.mkDerivation {
+      efinal.melpaBuild {
         pname = name;
         version = resolvedVersion;
-        buildInputs = [ (emacsWith efinal requires) ];
-        propagatedBuildInputs = map (x: efinal.${x}) requires;
         src = filteredSrc;
-
-        buildPhase = ''
-          set -e
-          emacs --batch \
-            --directory . \
-            --funcall batch-byte-compile *.el 2> stderr.txt
-          cat stderr.txt
-          ! grep -q ': Warning:' stderr.txt || false
-        '';
-
-        installPhase = ''
-          set -e
-          LISPDIR=$out/share/emacs/site-lisp
-          install -d $LISPDIR
-          install *.el *.elc $LISPDIR
-        '';
+        packageRequires = map (x: efinal.${x}) (requiresFor pkgs);
+        turnCompilationWarningToError = true;
       };
 
       mkChecks = pkgs: efinal:
@@ -86,6 +64,8 @@
         inherit (pkgs) lib;
         requires = requiresFor pkgs;
 
+        emacsWith = efinal: packages:
+          efinal.emacsWithPackages (epkgs: map (x: epkgs.${x}) packages);
         emacsWithDeps = emacsWith efinal requires;
         emacsForChecks = emacsWith efinal
           (requires ++ optionalDependencies
