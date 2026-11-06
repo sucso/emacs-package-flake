@@ -85,6 +85,18 @@
             touch $out
           '';
 
+        package-lint = pkgs.runCommand
+          "${name}-package-lint" { nativeBuildInputs = [ emacsForChecks ]; }
+          ''
+            emacs --batch --eval "
+              (progn
+                (require 'package-lint)
+                (defun package-lint--check-packages-installable (valid-deps) nil)
+                (package-lint-batch-and-exit))
+              " ${sourceFilesGlob}
+            touch $out
+          '';
+
         checkdoc = pkgs.runCommand
           "${name}-checkdoc" { nativeBuildInputs = [ emacsWithDeps ]; }
           ''
@@ -98,22 +110,10 @@
             ! test -s checkdoc-stderr.txt || false
             touch $out
           '';
-
-        package-lint = pkgs.runCommand
-          "${name}-package-lint" { nativeBuildInputs = [ emacsForChecks ]; }
-          ''
-            emacs --batch --eval "
-              (progn
-                (require 'package-lint)
-                (defun package-lint--check-packages-installable (valid-deps) nil)
-                (package-lint-batch-and-exit))
-              " ${sourceFilesGlob}
-            touch $out
-          '';
       in
       lib.optionalAttrs doErt { inherit ert; }
-      // lib.optionalAttrs doCheckdoc { inherit checkdoc; }
-      // lib.optionalAttrs doPackageLint { inherit package-lint; };
+      // lib.optionalAttrs doPackageLint { inherit package-lint; }
+      // lib.optionalAttrs doCheckdoc { inherit checkdoc; };
     in
     { overlays.default = overlay; }
     // flake-utils.lib.eachDefaultSystem (system:
