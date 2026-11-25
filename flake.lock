@@ -21,7 +21,7 @@
     "fromElisp": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-wHlsL9w2CuOyt7Fi3BpW5F/oD2CLlRKI3RXUkMNV7UA=",
+        "narHash": "sha256-ojrc990B0Jslqrn1yl7nvEqkX+xsMh2nsfZfgYFTslI=",
         "type": "file",
         "url": "https://github.com/talyz/fromElisp"
       },

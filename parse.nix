@@ -1,4 +1,4 @@
-{ fromElisp, lib }:
+{ lib, fromElisp }:
 
 # This file was copied from https://github.com/nix-community/emacs-overlay
 # Last time the file was merged with upstream changes: 2026-10-31
