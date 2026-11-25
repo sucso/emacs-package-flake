@@ -18,7 +18,7 @@ The main use case is to have an easy and reliable continuous-integration (CI) se
 # flake.nix
 {
   inputs = {
-    emacs-package-flake.url = "github:luca-pr/emacs-package-flake";
+    emacs-package-flake.url = "github:sucso/emacs-package-flake";
   };
   outputs = { self, emacs-package-flake }:
     emacs-package-flake.lib.mkOutputs {
