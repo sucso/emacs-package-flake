@@ -1,5 +1,5 @@
 {
-  description = "A library to facilitate the definition of Nix Flakes for Emacs packages";
+  description = "A library for Nix Flakes for Emacs packages";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
